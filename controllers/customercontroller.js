@@ -171,8 +171,8 @@ const checkout = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "https://foodbuddy-backend-jp7b.onrender.com/success",
-      cancel_url: "https://foodbuddy-backend-jp7b.onrender.com/failure",
+      success_url: "https://foodbuddy1012.netlify.app/success",
+      cancel_url: "https://foodbuddy1012.netlify.app/failure",
     });
 
     res.json({ id: session.id });
