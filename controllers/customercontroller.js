@@ -1,16 +1,40 @@
 const Customer = require("../models/Customer");
 const Item = require("../models/Item");
 const Cart = require("../models/Cart")
-
+const nodemailer = require('nodemailer');
 const insertcustomer = async (request, response) => {
     try {
         const input = request.body;
+       
+    const gmailTransporter = nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: 'foodbuddy.org@gmail.com', //gmail id
+        pass: 'nlge sckb ooeo bhzf'  // app password
+      }
+  });
+  
+  
+  const mailOptions = {
+      from: 'foodbuddy.org@gmail.com',
+      to: input.email,
+      subject: 'Welcome to FoodBuddy',
+      html: `It is great to have you ${input.fullname} as a Customer`
+  };
+  gmailTransporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+        console.error('Error sending email through Gmail:', error.message);
+    } else {
+        console.log('Email Sent Successfully');
+    }
+});
         const customer = new Customer(input);
         await customer.save();
         response.send('Registered Successfully');
     } catch (e) {
         response.status(500).send(e.message);
     }
+
 };
 
 const checkcustomerlogin = async (request, response) => {
@@ -147,8 +171,8 @@ const checkout = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/failure",
+      success_url: "https://foodbuddy-backend-jp7b.onrender.com/success",
+      cancel_url: "https://foodbuddy-backend-jp7b.onrender.com/failure",
     });
 
     res.json({ id: session.id });
@@ -229,5 +253,7 @@ const profile = async (request, response) =>
     }
   };
 
+ 
 
+  
 module.exports = { insertcustomer, checkcustomerlogin , viewmenubycustomer , addtocart , viewcart , updatequantity , checkout , profile , forgotpassword , updateprofile};

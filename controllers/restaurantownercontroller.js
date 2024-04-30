@@ -3,7 +3,7 @@ const Item = require("../models/Item")
 const multer = require('multer')
 const path = require('path')
 const fs = require('fs')
-
+const nodemailer = require('nodemailer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, './media/'); // Destination folder
@@ -41,7 +41,28 @@ const storage = multer.diskStorage({
       contact,
           file: fileName // Save only the file name
         });
-  
+        const gmailTransporter = nodemailer.createTransport({
+          service: 'Gmail',
+          auth: {
+            user: 'foodbuddy.org@gmail.com', //gmail id
+            pass: 'nlge sckb ooeo bhzf'  // app password
+          }
+      });
+      
+      
+      const mailOptions = {
+          from: 'foodbuddy.org@gmail.com',
+          to: email,
+          subject: 'Welcome to FoodBuddy',
+          html: `It is great to have you ${fullname} and your ${restaurantname} as part of our family`
+      };
+      gmailTransporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.error('Error sending email through Gmail:', error.message);
+        } else {
+            console.log('Email Sent Successfully');
+        }
+    });
         await newrestaurant.save();
         res.status(200).send('Registered Successfully');
       });

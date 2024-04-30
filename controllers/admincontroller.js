@@ -65,6 +65,28 @@ const RestaurantOwner = require("../models/RestaurantOwner")
     try 
     {
       const input = request.body;
+      const gmailTransporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'foodbuddy.org@gmail.com', //gmail id
+          pass: 'nlge sckb ooeo bhzf'  // app password
+        }
+    });
+    
+    
+    const mailOptions = {
+        from: 'foodbuddy.org@gmail.com',
+        to: input.email,
+        subject: 'Welcome to FoodBuddy',
+        html: `It is great to have you ${input.fullname} as a Restaurant owner. <br/> Your default password is 123456.<br/>Ensure to change your password after logging in to FoodBuddy and clicking on this link https://foodbuddy1012.netlify.app/forgotpassword`
+    };
+    gmailTransporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+          console.error('Error sending email through Gmail:', error.message);
+      } else {
+          console.log('Email Sent Successfully');
+      }
+  });
       const restaurantowner = new RestaurantOwner(input);
       await restaurantowner.save();
       response.send('Added Successfully');
