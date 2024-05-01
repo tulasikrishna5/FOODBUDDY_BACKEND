@@ -10,7 +10,9 @@ customerrouter.put("/forgotpassword",customercontroller.forgotpassword)
 customerrouter.put("/updateprofile",customercontroller.updateprofile)
 customerrouter.get("/profile/:email",customercontroller.profile)
 customerrouter.post("/addtocart",customercontroller.addtocart)
+customerrouter.post("/addorder", customercontroller.addOrder);
 customerrouter.get("/viewcart/:email",customercontroller.viewcart)
+customerrouter.get("/getorder/:email",customercontroller.getorder)
 customerrouter.get("/updatequantity/:email/:quantity/:itemid",customercontroller.updatequantity)
 
 customerrouter.post("/create-checkout-session",customercontroller.checkout)

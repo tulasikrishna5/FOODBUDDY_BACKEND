@@ -8,7 +8,7 @@ const CartSchema = new mongoose.Schema({
         required: true,
         default: () => generateRandomId()
     },
-    //this value will be taken from Job model
+    
     itemid: {
         type: Number,
         required: true
@@ -44,7 +44,7 @@ function generateRandomId() {
     const min = 100000;
     const max = 999999;
     const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-    return "J" + randomNumber;
+    return "I" + randomNumber;
 }
 
 module.exports = Cart;

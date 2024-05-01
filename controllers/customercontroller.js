@@ -2,6 +2,7 @@ const Customer = require("../models/Customer");
 const Item = require("../models/Item");
 const Cart = require("../models/Cart")
 const nodemailer = require('nodemailer');
+const Order = require('../models/Order')
 const insertcustomer = async (request, response) => {
     try {
         const input = request.body;
@@ -173,10 +174,12 @@ const checkout = async (req, res) => {
       mode: "payment",
       success_url: "https://foodbuddy1012.netlify.app/success",
       cancel_url: "https://foodbuddy1012.netlify.app/failure",
+    
     });
 
     res.json({ id: session.id });
   } catch (error) {
+
     console.error("Error creating checkout session:", error);
     res.status(500).json({ error: "Failed to create checkout session" });
   }
@@ -218,7 +221,7 @@ const profile = async (request, response) =>
      }
      else
      {
-       return response.status(200).send('Job seeker not found with the provided email id');
+       return response.status(200).send('Customer not found with the provided email id');
      }
      
    } 
@@ -236,7 +239,7 @@ const profile = async (request, response) =>
       const customer = await Customer.findOne({ email });
       if (!customer) 
       {
-        response.status(200).send('Job seeker not found with the provided email id');
+        response.status(200).send('Customer not found with the provided email id');
       }
       for (const key in input) 
       {
@@ -245,7 +248,7 @@ const profile = async (request, response) =>
         }
       }
       await customer.save();
-      response.status(200).send('Job Seeker Profile Updated Successfully');
+      response.status(200).send('Customer Profile Updated Successfully');
     } 
     catch (e) 
     {
@@ -255,5 +258,47 @@ const profile = async (request, response) =>
 
  
 
+const addOrder = async (request, response) => {
+  try {
+    const { orderid, items, totalprice, totalquantity, status, customeremail } = request.body;
+
+    const newOrder = new Order({
+      orderId: orderid,
+      items: items,
+      totalprice: totalprice,
+      totalquantity: totalquantity,
+      status: status,
+      customeremail: customeremail
+    });
+
+    await newOrder.save();
+    response.status(200).send("Order saved successfully");
+  } catch (error) {
+    console.error("Error saving order:", error);
+    response.status(500).send("Failed to save order");
+  }
+};
+
+const getorder = async (request, response) => 
+ {
+    try 
+    {
+      const email = request.params.email
+      const orders = await Order.find({"customeremail":email});
+      if(orders.length==0)
+      {
+        response.status(404).send("No order");
+      }
+      else
+      {
+        response.json(orders);
+      }
+    } 
+    catch (error) 
+    {
+      response.status(500).send(error.message);
+    }
+  };
+
   
-module.exports = { insertcustomer, checkcustomerlogin , viewmenubycustomer , addtocart , viewcart , updatequantity , checkout , profile , forgotpassword , updateprofile};
+module.exports = { insertcustomer, checkcustomerlogin , viewmenubycustomer , addtocart , viewcart , updatequantity , checkout , profile , forgotpassword , updateprofile , addOrder , getorder};

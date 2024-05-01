@@ -11,5 +11,5 @@ restaurantownerrouter.get("/profile/:email",restaurantownercontroller.profile)
 restaurantownerrouter.get("/viewrestaurants",restaurantownercontroller.viewrestaurants)
 restaurantownerrouter.get("/restaurantimage/:filename",restaurantownercontroller.restaurantimage)
 restaurantownerrouter.get("/viewmenu/:runame",restaurantownercontroller.viewmenu)
-
+restaurantownerrouter.get("/getmenu",restaurantownercontroller.getMenu)
 module.exports = restaurantownerrouter

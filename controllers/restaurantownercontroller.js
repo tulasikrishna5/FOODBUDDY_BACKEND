@@ -109,6 +109,21 @@ const viewrestaurants = async (req, res) =>
     res.status(500).send(error.message);
   }
 };
+
+const getMenu = async (req,res)=>
+{
+  try 
+  {
+    const items = await Item.find().limit(4);
+
+    res.status(200).json(items);
+  } 
+  catch (error) 
+  {
+    res.status(500).send(error.message);
+  }
+}
+
 const restaurantimage = async (req, res) => 
 {
   const filename = req.params.filename;
@@ -198,7 +213,7 @@ const profile = async (request, response) =>
      }
      else
      {
-       return response.status(200).send('Job seeker not found with the provided email id');
+       return response.status(200).send('Restaurant Owner not found with the provided email id');
      }
      
    } 
@@ -208,4 +223,5 @@ const profile = async (request, response) =>
    }
  };
 
-module.exports = { insertrestaurantOwner, checkrestaurantOwnerlogin , additem , viewrestaurants , restaurantimage , viewmenu  , profile , forgotpassword};
+ 
+module.exports = { insertrestaurantOwner, checkrestaurantOwnerlogin , additem , viewrestaurants , restaurantimage , viewmenu  , profile , forgotpassword , getMenu};
